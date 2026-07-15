@@ -1,7 +1,7 @@
 // Original/ と dist/ の全ページについて、可視テキストと有効リンク集合の一致を検証する。
 // Script は再構築で意図的に落としているため、比較前に原本からも除去する。
 import * as cheerio from "cheerio";
-import { maskAuthorEmails, unwrapMailto } from "../src/sanitize";
+import { maskAuthorEmails, stripDeadEmbeds, unwrapMailto } from "../src/sanitize";
 import { walk } from "../src/walk";
 import { readFileSync } from "node:fs";
 import { join, relative } from "node:path";
@@ -12,7 +12,8 @@ function digest(file: string): { text: string; links: string } {
   // 両者を同一のパース→再直列化に通してから、タグ境界に空白を入れて正規化する。
   // 原本の壊れた属性（href"…"）は a タグの入れ子を生み、直列化段階の違いが疑似差分になるため
   // 復元版は mailto リンクを剥がしてテキストを残すため、タグ境界の正規化前に両者とも同じ形に揃える
-  const serialized = unwrapMailto(cheerio.load(readFileSync(file, "utf8")).html());
+  const parsed = cheerio.load(readFileSync(file, "utf8")).html();
+  const serialized = stripDeadEmbeds(unwrapMailto(parsed));
   const $ = cheerio.load(serialized.replaceAll("><", "> <"));
   $("script").remove();
   // ミラー告知バーは復元版で意図的に追加しているため、比較前に除く
@@ -27,9 +28,6 @@ function digest(file: string): { text: string; links: string } {
   return { text, links: links.join("|") };
 }
 
-// 既知の許容差分: 死んだ Google カスタム検索ウィジェットを落としている2ページ（リンクは一致必須）
-const KNOWN_TEXT_DIFF = new Set(["1934/10rikup.html", "text/nm_syo02.html", "taro/zakk0001.html"]);
-
 let textDiff = 0;
 let linkDiff = 0;
 let n = 0;
@@ -40,7 +38,7 @@ for (const orig of walk(join(ROOT, "original"), [".html"])) {
   const a = digest(orig);
   const b = digest(built);
   n++;
-  if (a.text !== b.text && !KNOWN_TEXT_DIFF.has(rel)) {
+  if (a.text !== b.text) {
     textDiff++;
     if (report.length < 8) {
       let i = 0;
