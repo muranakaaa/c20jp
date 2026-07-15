@@ -1,2 +1,5 @@
 [tools]
 bun = "1.3.14"
+
+[env]
+SITE_ORIGIN = "https://c20-new.n-muranaka.workers.dev"
