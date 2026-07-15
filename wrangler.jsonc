@@ -1,0 +1,18 @@
+{
+  "$schema": "https://unpkg.com/wrangler/config-schema.json",
+  "name": "c20-new",
+  // account_id は環境変数 CLOUDFLARE_ACCOUNT_ID で渡す（mise.local.toml、git 管理外）
+  "compatibility_date": "2026-07-14",
+  "observability": {
+    "enabled": true
+  },
+  "main": "src/worker.ts",
+  "minify": true,
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    // 原本どおりの .html 付き URL をリダイレクトなしで配信する。
+    // ディレクトリの index 解決と 404 は worker.ts が担う（not_found_handling はナビゲーション時に Worker を素通りさせるため使わない）
+    "html_handling": "none"
+  }
+}

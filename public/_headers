@@ -1,0 +1,15 @@
+/*
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Content-Security-Policy: frame-ancestors 'none'
+  Referrer-Policy: strict-origin-when-cross-origin
+
+/*.css
+  Cache-Control: public, max-age=86400
+
+/include/*
+  Cache-Control: public, max-age=86400
+
+/img/*
+  Cache-Control: public, max-age=604800
