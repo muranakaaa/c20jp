@@ -16,7 +16,7 @@ export function maskAuthorEmails(s: string): string {
 // 原本のスクリプトは AdSense・停止済みトラッキング・死んだウィジェットのみで UI に寄与しない。
 // 2006年版で追加された広告・Google カスタム検索バー。すべて http 参照の混在コンテンツで、
 // 本番の HTTPS 配信では動かない（検索フォームは Shift_JIS 前提で壊れている）。
-// Script / Amazon ビーコン / CSE 検索フォーム / ブランディング CSS import / [PR] 広告リンクを除去する
+// Script / Amazon ビーコン / CSE 検索フォーム / ブランディング CSS import / [PR] 広告・ホスティング会社バナーのリンクを除去する
 export function stripDeadEmbeds(s: string): string {
   return s
     .replaceAll(/<script\b[^>]*>[\s\S]*?<\/script>/giu, "")
@@ -24,7 +24,11 @@ export function stripDeadEmbeds(s: string): string {
     .replaceAll(/<style\b[^>]*>[\s\S]*?<\/style>/giu, "")
     .replaceAll(/<form[^>]*id="cse-search-box"[\s\S]*?<\/form>/giu, "")
     .replaceAll(/<div class="cse-branding-[^"]*"[^>]*>[\s\S]*?<\/div>\s*<\/div>/giu, "")
-    .replaceAll(/<a [^>]*href="https?:\/\/www\.europawatch\.jp[^"]*"[^>]*>[\s\S]*?<\/a>/giu, "");
+    .replaceAll(/<a [^>]*href="https?:\/\/www\.europawatch\.jp[^"]*"[^>]*>[\s\S]*?<\/a>/giu, "")
+    .replaceAll(
+      /<a [^>]*href="https?:\/\/(?:www\.)?colorchips\.co\.jp[^"]*"[^>]*>[\s\S]*?<\/a>/giu,
+      "",
+    );
 }
 
 // 編集残骸の壊れリンク（href"…" 等）は再直列化でゴミ属性になるため、属性なしの <a> に正規化する

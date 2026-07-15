@@ -27,7 +27,6 @@ const ASSETS = [
   "other.css",
   "top.css",
   "include/include.css",
-  "img/asica.jpg",
 ];
 for (const a of ASSETS) {
   const src = join(ROOT, "original", a);
