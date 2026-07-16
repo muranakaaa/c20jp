@@ -15,6 +15,7 @@ letter-spacing:1px;
 background-color:#f4f4f8;
 border-bottom:1px solid #99c;
 padding:4px 8px;
+line-height:1.15;
 /*　Webフォント（head で CSS を読み込んだときのみ効く。未読込なら既定フォントにフォールバック）　*/
 font-family:"MFW-TBCGoStd-Regular",sans-serif;
 }
