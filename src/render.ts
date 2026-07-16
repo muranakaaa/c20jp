@@ -308,7 +308,7 @@ export function renderPage(doc: PageDoc): HtmlEscapedString | Promise<HtmlEscape
           taroさん）をアーカイブから復元した非公式ミラーです。 運営:
           <a href="https://x.com/ayatakaa_chan" target="_blank" rel="noopener">@ayatakaa_chan</a
           >　ソース:
-          <a href="https://github.com/muranakaaa/c20.jp" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://github.com/muranakaaa/c20jp" target="_blank" rel="noopener">GitHub</a>
         </div>
         ${raw(
           sections

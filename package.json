@@ -5,7 +5,7 @@
   "description": "「クリック２０世紀」復元ミラー（Wayback Machine アーカイブから構造化データ + Hono SSG で再構築）",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/muranakaaa/c20.jp.git"
+    "url": "git+https://github.com/muranakaaa/c20jp.git"
   },
   "scripts": {
     "download": "bun tools/download.ts",
