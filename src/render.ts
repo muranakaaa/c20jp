@@ -1,8 +1,18 @@
 // Content/pages/*.json のブロック列から旧サイトと同一の markup を再生成する。
 // フラグメントは抽出時の HTML を sanitize.ts の公開時加工に通してそのまま埋め込む。
+import { createHash } from "node:crypto";
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import { html, raw } from "hono/html";
 import { sanitizeFragment } from "./sanitize";
 import type { HtmlEscapedString } from "hono/utils/html";
+
+// Compat.css の内容ハッシュ。link に ?v= として付け、更新のたびに URL を変えてキャッシュを確実に更新する
+// （このモジュールはビルド時のみ実行される。配信 Worker は worker.ts で、render は import しない）
+const COMPAT_CSS_VERSION = createHash("sha256")
+  .update(readFileSync(join(import.meta.dirname, "..", "public", "compat.css")))
+  .digest("hex")
+  .slice(0, 8);
 
 export interface TimelineCell {
   id: string | null;
@@ -261,7 +271,7 @@ export function renderPage(doc: PageDoc): HtmlEscapedString | Promise<HtmlEscape
         <title>${buildTitle(doc)}</title>
         ${doc.description ? html`<meta name="description" content="${doc.description}" />` : ""}
         ${raw(doc.css.map((c) => `<link rel="stylesheet" href="${cssHref(c)}">`).join("\n"))}
-        <link rel="stylesheet" href="/compat.css" />
+        <link rel="stylesheet" href="/compat.css?v=${COMPAT_CSS_VERSION}" />
         ${raw(canonicalHref(doc.path))} ${raw(jsonLd(doc))} ${raw(headExtras())}
       </head>
       <body>
